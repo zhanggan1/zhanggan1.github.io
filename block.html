@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .box{
+            width:1100px;
+            height:500px;
+            margin:50px auto;
+            position:relative;
+        }
+        .box div{
+            width:1000px;
+            height:500px;
+            background:url("img/js_0.jpg");
+            position:relative;
+        }
+        #btn{
+            width:100px;
+            height:40px;
+            position:absolute;
+            right:0;
+            bottom:0;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oBtn = document.getElementById('btn');
+            var oBox = document.getElementById('box');
+            var timer;
+            //创建span
+            var R = 5;
+            var C = 5;
+
+            for(var r = 0; r < R; r++){
+                for(var c = 0; c < C; c++){
+                    var oSpan = document.createElement('span');
+                    oSpan.style.width = oBox.offsetWidth / C + 'px';
+                    oSpan.style.height = oBox.offsetHeight / R + 'px';
+                    oSpan.style.opacity = 0;
+                    oSpan.style.position = 'absolute';
+                    oSpan.style.backgroundImage = 'url(img/js_'+1+'.jpg)';
+                    oBox.appendChild(oSpan);
+
+                    oSpan.style.left = oSpan.offsetWidth * c + 'px';
+                    oSpan.style.top = oSpan.offsetHeight * r + 'px';
+
+                    oSpan.style.backgroundPosition=-oSpan.offsetWidth*c+'px '+-oSpan.offsetHeight*r+'px';
+
+                }
+            }
+
+            //下一页
+            var aSpan = oBox.children;
+            var n = 0;
+            var bFlag=false;
+            oBtn.onclick = function(){
+                if(bFlag)return;
+                bFlag=true;
+                var iNow = 0;
+                n++;
+
+                oBox.style.backgroundImage='url(img/js_'+(n - 1)%6+'.jpg)';
+                timer=setInterval(function(){
+                    aSpan[iNow].style.opacity=0;
+                    move(aSpan[iNow],{opacity: 1});
+                    aSpan[iNow].style.backgroundImage='url(img/js_'+n%6+'.jpg)';
+                    iNow++;
+
+                    if(iNow==aSpan.length){
+                        clearInterval(timer);
+                        bFlag=false;
+                    }
+                }, 100);
+            };
+        });
+    </script>
+</head>
+<body>
+<div class="box">
+    <div id="box"></div>
+    <input type="button" value="下一页" id="btn">
+</div>
+</body>
+</html>

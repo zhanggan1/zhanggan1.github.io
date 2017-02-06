@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        body{
+            background:#000;
+            color:#fff;
+            font-size:30px;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var str = '★☆♀◆◇◣◢◥▲▼△▽⊿◤ ◥　\　　　♡.2　▆ ▇ █ █ ■ ▓ 回 □ 〓≡ ╝╚╔ ╗╬ ═ ╓ ╩ ┠ ┨┯ ┷┏♡.3　┓┗ ┛┳⊥﹃﹄┌ ┐└ ┘∟「」↑↓→←↘↙♀♂┇┅ ﹉﹊﹍﹎╭♡.4　╮╰ ╯ *^_^* ^*^ ^-^ ^_^ ^︵^ ∵∴‖︱ ︳︴﹏﹋﹌︵︶︹︺♡.5　【】〖〗＠﹕﹗/ " _ < > `,·。≈{}~ ～() _ -『』√ $ @ * & # ※♡.6　卐 々∞Ψ ∪∩∈∏ の ℡ ぁ §∮〝〞ミ灬ξ№∑⌒ξζω＊ㄨ ≮≯ ＋♡.7　－×÷﹢﹣±／＝∫∮∝ ∞ ∧∨ ∑ ∏ ∥∠ ≌ ∽ ≦ ≧ ≒﹤﹥じ♡.8　☆veve↑↓⊙●★☆■♀『』◆◣◥▲Ψ ※◤ ◥ →№←㊣∑⌒〖〗♡.9　ξζω□∮〓※∴ぷ▂▃▅▆█ ∏卐【】△√ ∩¤々♀♂∞①ㄨ≡↘↙▂♡.10　▂ ▃ ▄ ▅ ▆ ▇ █┗┛╰☆╮ ≠ ▂ ▃ ▄♡.　单行组合符号.1．·°∴ ☆．．·°♡Yesterday is memory❤Today is a gift ❤Tomorrow is a mystery ♡．·°♡.2　♡KicaZ寶貝o(╥﹏╥)o ♥　じ☆ve【 오빠 사랑해요 】*° ^_^.......♧♧♡.3　┢┦aΡｐy ♡^_^♡　☜♥☞　☞　☜　ぜ長ヤ乷　｡◕‿◕｡Cool Friends｡◕‿◕｡♡.4　︻︼─一　▄︻┻┳═一　▄︻┳一　▄︻┻═┳一　▄︻┳-一♡.5　▄︻┻═┳　︻┳═一　▄︻┳一·　▄︻┳═一　︻┳═一oO♡.6　-─═┳︻　∝╬══→　::======>>　┈━═☆　┣▇▇▇═─';
+            var timer;
+            for(var i = 0; i < str.length; i++){
+                var oSpan = document.createElement('span');
+                oSpan.innerHTML = str.charAt(i);
+                oSpan.style.opacity = 0;
+                document.body.appendChild(oSpan);
+            }
+            var aSpan = document.body.children;
+            var iNow = 0;
+            timer = setInterval(function(){
+                move(aSpan[iNow],{"opacity":"1"},{"duration":"300"});
+                iNow++;
+            },30);
+            if(iNow >= aSpan.length){
+                clearInterval(timer);
+            }
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

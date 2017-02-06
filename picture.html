@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        ul{
+            width:667px;
+            height:667px;
+            margin:0 auto ;
+            position:relative;
+        }
+        ul li{
+            width:200px;
+            height:200px;
+            border:1px solid #000;
+            float:left;
+            margin:8px;
+        }
+        ul img{
+            width:200px;
+        }
+        ul li.cative{
+            border:1px dashed #0ff;
+        }
+        #btn{
+            height:40px;
+            position:absolute;
+            right:-100px;
+            bottom:340px;
+            opacity:0.5;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oUl = document.getElementById('ul1');
+            var aLi = oUl.getElementsByTagName('li');
+            var oBtn = document.getElementById('btn');
+
+            oBtn.onclick = function(){
+                aPos.sort(function(){
+                    return Math.random()- 0.5;
+                });
+                for(var i = 0; i < aLi.length; i++){
+                    move(aLi[i],aPos[i]);
+                }
+            };
+
+            //布局转换
+            var aPos = [];
+            var zIndex = 999;
+            var timer;
+            for(var i = 0; i < aLi.length; i++){
+                aPos[i] = {
+                    "left":aLi[i].offsetLeft,
+                    "top":aLi[i].offsetTop
+                };
+            }
+            for(var i = 0; i < aLi.length; i++){
+                aLi[i].style.position = 'absolute';
+                aLi[i].style.left = aPos[i].left + 'px';
+                aLi[i].style.top = aPos[i].top + 'px';
+                //console.log(aLi[i]);
+
+            }
+            //拖拽
+            for(var  i = 0; i < aLi.length; i++){
+                drag(aLi[i]);
+                aLi[i].index = i;
+            }
+            //封装函数 拖拽
+            function drag(obj){
+                obj.onmousedown = function(ev){
+                    //obj 当前按下的li
+                    obj.style.zIndex = zIndex++;
+                    clearInterval(obj.timer);
+                    obj.style.zIndex++;
+                    var oEvent = ev || event;
+                    var disX = oEvent.clientX - obj.offsetLeft;
+                    var disY = oEvent.clientY - obj.offsetTop;
+
+                    document.onmousemove = function(ev){
+                        var oEvent = ev || event;
+                        obj.style.left = oEvent.clientX - disX + 'px';
+                        obj.style.top = oEvent.clientY - disY + 'px';
+
+                        for(var i = 0; i < aLi.length; i++){
+                            aLi[i].className = '';
+                        };
+                        var oNear = findNearest(obj);
+                        if(oNear){
+                            oNear.className = 'cative';
+                        };
+                    };
+
+                    document.onmouseup = function(){
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                        //alert(getDis(obj,aLi[2]));
+                        var oNear = findNearest(obj);
+                        if(oNear){
+                            //交换位置 运动
+                            move(oNear,aPos[obj.index]);
+                            move(obj,aPos[oNear.index]);
+                            oNear.className = '';
+                            var tmp;
+
+                            tmp = oNear.index;
+                            oNear.index = obj.index;
+                            obj.index = tmp;
+                        }else{
+                            //回到原位
+                            move(obj,{"left":aPos[obj.index].left,"top":aPos[obj.index].top});
+                        }
+                    };
+                    return false;
+                };
+            }
+            //封装函数 碰撞
+            function collTest1(obj,obj2){
+                var l1 = obj.offsetLeft;
+                var t1 = obj.offsetTop;
+                var r1 = obj.offsetWidth + l1;
+                var b1 = obj.offsetHeight + t1;
+                var l2 = obj2.offsetLeft;
+                var t2 = obj2.offsetTop;
+                var r2 = obj2.offsetWidth + l2;
+                var b2 = obj2.offsetHeight + t2;
+
+                if(r1 < l2 || b1 <t2 || r2 < l1 || b2 < t1){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+            //封装函数 求物体的距离(物体的中心点)
+            function getDis(obj,obj2){
+                var l1 = obj.offsetLeft + obj.offsetWidth/2;
+                var t1 = obj.offsetTop + obj.offsetHeight/2;
+                var l2 = obj2.offsetLeft + obj2.offsetWidth/2;
+                var t2 = obj2.offsetTop + obj2.offsetHeight/2;
+                var a = l1 - l2;
+                var b = t1 - t2;
+                return Math.sqrt(a * a + b * b);
+            }
+            //封装函数 最近的位置
+            function findNearest(obj){
+                var iMin = 9999999;
+                var iMinIndex = -1;
+                for(var i = 0; i < aLi.length; i++){
+                    if(obj == aLi[i])continue;
+                    if(collTest1(obj,aLi[i])){
+                        var dis = collTest1(obj,aLi[i]);
+                        if(dis < iMin){
+                            iMin = dis;
+                            iMinIndex = i;
+                        }
+                    }
+                }
+                if(iMinIndex == -1){
+                    return null;
+                }else{
+                    return aLi[iMinIndex]
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<ul id="ul1">
+    <li><img src="img/js_6.jpg" /></li>
+    <li><img src="img/js_7.jpg" /></li>
+    <li><img src="img/js_8.jpg" /></li>
+    <li><img src="img/js_9.jpg" /></li>
+    <li><img src="img/js_10.jpg" /></li>
+    <li><img src="img/js_11.jpg" /></li>
+    <li><img src="img/js_12.jpg" /></li>
+    <li><img src="img/js_13.jpg" /></li>
+    <li><img src="img/js_14.jpg" /></li>
+    <input type="button" value="随机变换位置" id="btn">
+</ul>
+</body>
+</html>

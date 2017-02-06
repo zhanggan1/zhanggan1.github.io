@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        body{
+            overflow:hidden;
+        }
+        .box{
+            width:798px;
+            height:449px;
+            background:url("img/ex_1.jpg");
+            position:absolute;
+            left:50%;
+            top:10%;
+            margin-left:-400px;
+        }
+        .box span{
+            position:absolute;
+            background:url("img/ex_0.jpg");
+        }
+    </style>
+    <script>
+        function domReady(fn){
+            if(document.addEventListener){
+                document.addEventListener('DOMContentLoaded', function(){
+                    fn && fn();
+                }, false);
+            }else{
+                document.attachEvent('onreadystatechange', function(){
+                    if(document.readyState=='complete'){
+                        fn && fn();
+                    }
+                });
+            }
+        }
+        function rnd(n,m){
+            return parseInt(Math.random()*(m-n))+n;
+        }
+        domReady(function(){
+            var oBox = document.querySelector('.box');
+            var R = 4;
+            var C = 7;
+
+            for(var r= 0; r < R; r++){
+                for(var c = 0; c < C; c++){
+                    var oSpan = document.createElement('span');
+                    oSpan.style.width = oBox.offsetWidth/C + 'px';
+                    oSpan.style.height = oBox.offsetHeight/R + 'px';
+                    oBox.appendChild(oSpan);
+
+                    oSpan.style.left = oSpan.offsetWidth*c + 'px';
+                    oSpan.style.top = oSpan.offsetHeight*r + 'px';
+                    oSpan.style.backgroundPosition = '-'+oSpan.offsetWidth*c+'px -'+oSpan.offsetHeight*r+'px';
+                }
+            }
+            var aSpan = oBox.children;
+            var iNow = 0;
+            var bFlag = false;
+
+            oBox.onclick = function(){
+                if(bFlag)return;
+                bFlag = true;
+                iNow++;
+                for(var i = 0; i < aSpan.length; i++){
+                    aSpan[i].style.transition = '.7s all ease';
+                    var x = -(oBox.offsetWidth/2 - aSpan[i].offsetWidth/2 - aSpan[i].offsetLeft);
+                    var y = -(oBox.offsetHeight/2 - aSpan[i].offsetHeight/2 - aSpan[i].offsetTop);
+
+                    aSpan[i].style.transform = 'scale(2) translateX('+x+'px) translateY('+y+'px) rotateX('+rnd(-180,180)+'deg) rotate('+rnd(-180,180)+'deg)';
+                    aSpan[i].style.opacity = 0;
+
+                }
+                aSpan[0].addEventListener('transitionend',function(){
+                    for(var i = 0; i < aSpan.length; i++){
+                        aSpan[i].style.transition = 'none';
+                        aSpan[i].style.transform='scale(1) translateX(0px) translateY(0px) rotateX(0deg) rotateY(0deg)';
+                        aSpan[i].style.opacity=1;
+                        aSpan[i].style.backgroundImage = 'url(img/ex_'+iNow%4+'.jpg)';
+                        oBox.style.backgroundImage = 'url(img/ex_'+(iNow+1)%4+'.jpg)';
+
+                    }
+                    bFlag = false;
+                },false);
+            };
+        });
+    </script>
+</head>
+<body>
+<div class="box"></div>
+</body>
+</html>

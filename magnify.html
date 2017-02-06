@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        #box{
+            position: absolute;
+            left:0 ;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+        #box img{
+            width: 200px;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oBox=document.getElementById('box');
+            var aImg=oBox.children;
+
+            document.onmousemove=function(ev){
+                var oEvent=ev || event;
+
+                for(var i=0; i<aImg.length; i++){
+                    // left差
+                    var a=getPos(aImg[i]).left+aImg[i].offsetWidth/2-oEvent.clientX;
+                    // top差
+                    var b=getPos(aImg[i]).top+aImg[i].offsetHeight/2-oEvent.clientY;
+                    // 鼠标距离中心点的距离
+                    var c=Math.sqrt(a*a+b*b);
+                    // 比例   500：感应距离
+                    var scale=1-c/500;
+                    scale<0.5 && (scale=0.5);
+                    aImg[i].style.width=400*scale+'px';
+                }
+            };
+        });
+    </script>
+</head>
+<body>
+<div id="box">
+    <img src="img/js_10.jpg">
+    <img src="img/js_6.jpg">
+    <img src="img/js_7.jpg">
+    <img src="img/js_8.jpg">
+    <img src="img/js_9.jpg">
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .box{
+            width:200px;
+            height:200px;
+            position:relative;
+            margin:200px auto;
+            transform-style: preserve-3d;
+            transform:rotateY(-45deg) rotateX(45deg);
+            color:#fff;
+            font-size:100px;
+            text-align:center;
+            line-height:200px;
+        }
+        .box div{
+            width:200px;
+            height:200px;
+            position:absolute;
+            left:0;
+            top:0;
+        }
+        .shift{
+            background:black;
+            transform: translateZ(100px);
+        }
+        .back{
+            background:black;
+            transform:translateZ(-100px);
+        }
+        .top{
+            background:black;
+            transform:translateX(-100px) rotateY(90deg);
+        }
+        .left{
+            background:black;
+            transform:translateY(100px) rotateX(90deg);
+        }
+        .right{
+            background: #000000;
+            transform:translateY(-100px) rotateX(90deg);
+        }
+        .bottom{
+            background:black;
+            transform:translateX(100px) rotateY(90deg);
+        }
+    </style>
+    <script>
+        function domReady(fn){
+            if(document.addEventListener){
+                document.addEventListener('DOMContentLoaded', function(){
+                    fn && fn();
+                }, false);
+            }else{
+                document.attachEvent('onreadystatechange', function(){
+                    if(document.readyState=='complete'){
+                        fn && fn();
+                    }
+                });
+            }
+        }
+        domReady(function(){
+            var oDiv = document.querySelector('.box');
+            var y = -45;
+            var x = 45;
+
+            document.onmousedown = function(ev){
+                var oEvent = ev || event;
+                var disX = oEvent.clientX - y;
+                var disY = oEvent.clientY - x;
+
+                document.onmousemove = function(ev){
+                    var oEvent = ev || event;
+                    y = oEvent.clientX - disX;
+                    x = oEvent.clientY - disY;
+                    oDiv.style.transform = 'rotateY('+y+'deg) rotateX('+x+'deg)';
+                };
+                document.onmouseup = function(){
+                    document.onmousemove = null;
+                    document.onmouseup = null;
+                };
+                return false;
+            };
+        });
+    </script>
+</head>
+<body>
+<div class="box">
+    <div class="shift">2</div>
+    <div class="back">1</div>
+    <div class="left">4</div>
+    <div class="right">3</div>
+    <div class="top">6</div>
+    <div class="bottom">5</div>
+</div>
+</body>
+</html>

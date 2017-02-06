@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        body{
+            background:#000;
+        }
+        div{
+            width:1000px;
+            height:500px;
+            border:1px solid #000;
+            margin:50px auto;
+            position:relative;
+            overflow:hidden;
+        }
+        div ul{
+            width:1000px;
+            height:500px;
+            position:relative;
+        }
+        ul li{
+            width:1000px;
+            height:500px;
+            float:left;
+            position:absolute;
+            left:1000px;
+            top:0;
+        }
+        div ol{
+            width:350px;
+            position:absolute;
+            left:50%;
+            bottom:10px;
+            margin-left: -160px;
+        }
+        ol li{
+            width:40px;
+            height:40px;
+            background:#0ff;
+            border-radius:50%;
+            margin:5px;
+            float:left;
+            cursor: pointer;
+        }
+        div input{
+            width:100px;
+            height:50px;
+            font-size:40px;
+            position:absolute;
+            top:50%;
+            margin:-20px;
+            opacity:0.3;
+            cursor: pointer;
+        }
+        #left{
+            left:30px;
+        }
+        #right{
+            right:30px;
+        }
+        ol li.active{
+            background: #fff;
+        }
+        ul li.active{
+            left:0;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oUl = document.getElementById('ul1');
+            var aLi = oUl.children;
+            var oOl = document.getElementById('ol1');
+            var aBtn = oOl.children;
+            var oLeft = document.getElementById('left');
+            var oRight = document.getElementById('right');
+
+            var iNow = 0;
+            var timer;
+            var width = aLi[0].offsetWidth;
+
+            //you
+            oRight.onclick = function(){
+                right();
+                clearInterval(timer);
+            };
+            function right(){
+                //当前这张走
+                move(aLi[iNow],{"left": -width});
+                //为下一张做准备
+                iNow++;
+                if(iNow > aLi.length-1){
+                    iNow = 0;
+                }
+                //移动时把所有里放右边
+                aLi[iNow].style.left = width + 'px';
+                console.log(width);
+                move(aLi[iNow],{"left":"0"});
+                tab();
+            }
+
+            //zuo
+            oLeft.onclick = function(){
+                clearInterval(timer);
+                //开始的位置
+                move(aLi[iNow],{"left": width});
+                iNow--;
+                if(iNow < 0){
+                    iNow = aLi.length-1;
+                }
+                //移动时的位置
+                aLi[iNow].style.left = -width + 'px';
+                //移动后的位置
+                move(aLi[iNow],{"left":"0"});
+                tab();
+            };
+            //自动播放
+            function clock(){
+                right();
+            }
+            timer = setInterval(clock,2000);
+            function overTimer(obj){
+                obj.onmouseover = function(){
+                    clearInterval(timer);
+                };
+                obj.onmouseout = function(){
+                    timer = setInterval(clock,2000);
+                };
+            }
+            overTimer(oUl);
+            overTimer(oLeft);
+            overTimer(oRight);
+            for(var i = 0; i < aBtn.length; i++){
+                overTimer(aBtn[1]);
+            }
+
+            function tab(){
+                for(var i = 0; i < aBtn.length; i++){
+                    aBtn[i].className = '';
+                }
+                aBtn[iNow].className = 'active';
+            }
+            //按钮
+            for(var i = 0; i < aBtn.length; i++){
+                aBtn[i].index = i;
+                aBtn[i].onclick = function(){
+                    clearInterval(timer);
+                    //左边  现在点击的小于之前点击的
+                    if(this.index < iNow){
+                        aLi[this.index].style.left = -width + 'px';
+                        //移动时
+                        move(aLi[iNow],{"left":width});
+
+                        move(aLi[this.index],{"left":"0"});
+                        //右边
+                    }else{
+                        aLi[this.index].style.left = width + 'px';
+                        move(aLi[iNow],{"left": -width});
+
+                        move(aLi[this.index],{"left":"0"});
+                    }
+                    iNow = this.index;
+                    tab();
+                };
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="div1">
+    <ul id="ul1">
+        <li class="active"><img src="img/js_0.jpg" /></li>
+        <li><img src="img/js_1.jpg" /></li>
+        <li><img src="img/js_2.jpg" /></li>
+        <li><img src="img/js_3.jpg" /></li>
+        <li><img src="img/js_4.jpg" /></li>
+        <li><img src="img/js_5.jpg" /></li>
+    </ul>
+    <ol id="ol1">
+        <li class="active"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
+    <input type="button" value="←" id="left">
+    <input type="button" value="→" id="right">
+</div>
+</body>
+</html>

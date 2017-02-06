@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        body{
+            overflow:hidden;
+        }
+        .box{
+            width:800px;
+            height:500px;
+            margin:70px auto 0;
+            position:relative;
+            background: url(img/cat_0.jpg);
+        }
+        .left{
+            width:50%;
+            height:100%;
+            background: url(img/cat_1.jpg) no-repeat right top;
+            position:absolute;
+            right:0;
+            top:0;
+        }
+        .right{
+            width:50%;
+            height:100%;
+            position:absolute;
+            right:0;
+            top:0;
+            transform-style:preserve-3d;
+            transform-origin:left center;
+        }
+        .page {
+            width: 100%;
+            height: 100%;
+            position:absolute;
+            left:0;
+            top:0;
+            z-index:2;
+            background:url("img/cat_0.jpg") no-repeat right top;
+            backface-visibility:hidden;
+        }
+        .page2{
+            width:100%;
+            height:100%;
+            position:absolute;
+            left:0;
+            top:0;
+            z-index:1;
+            transform:scale(-1,1);
+            background: url(img/cat_1.jpg);
+        }
+    </style>
+    <script>
+        function domReady(fn){
+            if(document.addEventListener){
+                document.addEventListener('DOMContentLoaded', function(){
+                    fn && fn();
+                }, false);
+            }else{
+                document.attachEvent('onreadystatechange', function(){
+                    if(document.readyState=='complete'){
+                        fn && fn();
+                    }
+                });
+            }
+        }
+        domReady(function(){
+            var oBox = document.querySelector('.box');
+            var oRight = document.querySelector('.right');
+            var oLeft = document.querySelector('.left');
+            var oPage = oRight.children[0];
+            var oPage2 = oRight.children[1];
+            var iNow = 0;
+            var bFlag = false;
+
+            oBox.onclick = function(){
+                if(bFlag)return;
+                bFlag = true;
+                iNow++;
+
+                oRight.style.transition = '1s all ease';
+                oRight.style.transform = 'perspective(800px) rotateY(-180deg)';
+
+                oRight.addEventListener('transitionend',function(){
+
+                    oBox.style.backgroundImage = 'url(img/cat_'+iNow%8+'.jpg)';
+                    oPage.style.backgroundImage = 'url(img/cat_'+iNow%8+'.jpg)';
+                    oLeft.style.backgroundImage = 'url(img/cat_'+(iNow+1)%8+'.jpg)';
+                    oPage2.style.backgroundImage = 'url(img/cat_'+(iNow+1)%8+'.jpg)';
+
+                    oRight.style.transition = 'none';
+                    oRight.style.transform = 'perspective(800px) rotateY(0deg)';
+                    bFlag = false;
+                },false);
+            };
+        });
+    </script>
+</head>
+<body>
+<div class="box">
+    <div class="left"></div>
+    <div class="right">
+        <div class="page"></div>
+        <div class="page2"></div>
+    </div>
+</div>
+</body>
+</html>

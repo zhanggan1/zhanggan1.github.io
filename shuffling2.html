@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        #div1{
+            width:1280px;
+            height:220px;
+            border:1px solid #000;
+            margin:100px auto;
+            padding:10px;
+            position:relative;
+            overflow:hidden;
+        }
+        #div1 ul{
+            position:absolute;
+            left:0;
+            top:10px;
+        }
+        #div1 li{
+            width:400px;
+            padding:10px;
+            float:left;
+        }
+        #div1 img{
+           width:400px;
+        }
+        input{
+            width:200px;
+            height:100px;
+            font-size:100px;
+            line-height:100px;
+            opacity:0.4;
+            background:#fff;
+            border:1px solid #fff;
+            cursor: pointer;
+        }
+        #btn{
+            position:absolute;
+            left:0;
+            top:50%;
+            margin-top:-50px;
+            z-index:2;
+        }
+        #btn2{
+            position:absolute;
+            right:0;
+            top:50%;
+            margin-top:-50px;
+            z-index:2;
+        }
+        .blank{
+            width:20px;
+            height:220px;
+            background:#fff;
+            position:absolute;
+            left:0;
+            top:10px;
+            z-index:999;
+        }
+        .blank_2{
+            width:20px;
+            height:220px;
+            background:#fff;
+            position:absolute;
+            right:0;
+            top:10px;
+            z-index:999;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oDiv = document.getElementById('div1');
+            var oUl = document.getElementById('ul1');
+            var oBtn = document.getElementById('btn');
+            var oBtn2 = document.getElementById('btn2');
+            var aLi = oUl.children;
+            var timer;
+
+            oUl.innerHTML += oUl.innerHTML;
+            oUl.style.width = aLi[0].offsetWidth * aLi.length + 'px';
+            var left = 0;
+
+            function toRight(){
+                clearInterval(timer);
+                timer = setInterval(function(){
+                    left += 2;
+                    if(left >= 0){
+                        left = -oUl.offsetWidth/2;
+                    }
+                    oUl.style.left = left + 'px';
+                },30);
+            }
+
+            function toLeft(){
+                clearInterval(timer);
+                timer = setInterval(function(){
+                    left -= 2;
+                    if(left <= -oUl.offsetWidth/2){
+                        left = 0;
+                    }
+                    oUl.style.left = left + 'px';
+                },30);
+            }
+
+            toRight();
+            oBtn.onclick = function(){
+                toLeft();
+            };
+
+            oBtn2.onclick = function(){
+                toRight();
+            };
+        });
+    </script>
+</head>
+<body>
+<div id="div1">
+    <div class="blank"></div>
+    <div class="blank_2"></div>
+    <ul id="ul1">
+        <li><img src="img/js_0.jpg"/></li>
+        <li><img src="img/js_1.jpg"/></li>
+        <li><img src="img/js_2.jpg"/></li>
+        <li><img src="img/js_4.jpg"/></li>
+    </ul>
+    <input type="button" value="←" id="btn"/>
+    <input type="button" value="→" id="btn2"/>
+</div>
+</body>
+</html>

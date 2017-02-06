@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>张淦</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style:none;
+        }
+        #ul1{
+            height:200px;
+            position:relative;
+            margin:100px auto;
+            overflow:hidden;
+        }
+        #ul1 li{
+            width:300px;
+            height:198px;
+            border:1px solid #0ff;
+            position:absolute;
+            left:0;
+            top:0;
+        }
+        #ul1 li img{
+            width:100%;
+            height:100%;
+        }
+        a{
+            position:absolute;
+            left:0;
+            top:0;
+        }
+    </style>
+    <script src="js/domReady.js"></script>
+    <script>
+        domReady(function(){
+            var oUl = document.getElementById('ul1');
+            var aLi = oUl.children;
+
+            //布局转换
+            var W = 30;
+            oUl.style.width = aLi[0].offsetWidth + (aLi.length - 1) * W + 'px';
+            for(var i = 1; i < aLi.length; i++){
+                aLi[i].style.left = aLi[0].offsetWidth + (i - 1) * W + 'px';
+
+            }
+            for(var i = 0; i < aLi.length; i++){
+                aLi[i].index = i;
+                aLi[i].onmouseover = function(){
+                    for(var j = 1; j < aLi.length; j++){
+                        if(j <= this.index){
+                            move(aLi[j],{"left":j * W},{"duration":"300"});
+                        }else{
+                            move(aLi[j],{"left":aLi[0].offsetWidth + (j - 1) * W},{"duration":"300"});
+                        }
+
+                    }
+                };
+            }
+        });
+    </script>
+</head>
+<body>
+<ul id="ul1">
+    <li><img src="img/js_1.jpg" /></li>
+    <li><img src="img/js_2.jpg" /></li>
+    <li><img src="img/js_3.jpg" /></li>
+    <li><img src="img/js_4.jpg" /></li>
+    <li><img src="img/js_5.jpg" /></li>
+    <li><img src="img/js_0.jpg" /></li>
+    <li><img src="img/js_1.jpg" /></li>
+    <li><img src="img/js_2.jpg" /></li>
+</ul>
+</body>
+</html>
